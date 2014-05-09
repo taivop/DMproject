@@ -107,7 +107,7 @@ class Diagnosis():
 
     def diagnosisCodeIsBasic(self, diagnosisCode):
         # Returns true iff the diagnosis code is basic, i.e. contains no dots (.) or dashes (-).
-        if(diagnosisCode.find('.') == -1 and diagnosisCode.find('-') == -1):
+        if(diagnosisCode.find('.') == -1 and diagnosisCode.find(',') == -1 and diagnosisCode.find('-') == -1):
             return True
         else:
             return False
@@ -119,5 +119,11 @@ class Diagnosis():
         elif(diagnosisCode.find('-') != -1):
             raise Exception('Diagnosis code contains a dash ("-").')
         else:
+            base = diagnosisCode
             dot = diagnosisCode.find('.')
-            return diagnosisCode[:dot]
+            comma = diagnosisCode.find(',')
+            if dot != -1:
+                base = base[:dot]
+            if comma != -1:
+                base = base[:comma]
+            return base

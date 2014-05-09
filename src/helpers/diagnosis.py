@@ -45,7 +45,7 @@ class Diagnosis():
 
     def getIdFromCode(self, code):
         # Get diagnosis id from diagnosis code.
-        return str(self.codesToIds[code])
+        return int(self.codesToIds[code])
 
     def getLabelFromCode(self, code):
         # Get diagnosis label from diagnosis code.

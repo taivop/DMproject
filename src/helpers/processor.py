@@ -10,7 +10,6 @@ class Processor():
         self.diag = Diagnosis()
 
 
-
     # Read in data from original file to numpy array.
     def originalFileToProcessedFiles(self):
         # 161430

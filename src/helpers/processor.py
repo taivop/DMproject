@@ -13,7 +13,7 @@ class Processor():
     # Read in data from original file to numpy array.
     def originalFileToProcessedFiles(self):
         # 161430
-        filepath = '../data/age_predict_data.txt'
+        filepath = '../data/other/age_predict_data.txt'
         data = np.loadtxt(filepath, delimiter='\t', skiprows=0, usecols=[],
                           dtype={'names': ('gender', 'age', 'diagnoses', 'prescriptions'),'formats': ('S1', 'i3', 'object', 'object')})
 
@@ -42,11 +42,27 @@ class Processor():
             genderStr = str(arr[i]['gender'][0]).strip("b'")
             genders[i] = (genderStr == 'M')
 
+        # partition into training set (80%) and test set (20%)
+        train_size = int(0.8 * arr.shape[0])
+        indices = np.random.permutation(arr.shape[0])
+        train_ind = indices[:train_size]
+        test_ind = indices[train_size:]
+
+        print('Training set size: {0} examples'.format(train_ind.shape[0]))
+        print('Test set size: {0} examples'.format(test_ind.shape[0]))
 
         # Save arrays to files.
-        np.save('../data/processed/genders.npy', genders)
-        np.save('../data/processed/ages.npy', ages)
-        np.save('../data/processed/diagnoses.npy', diagnoses)
+        np.save('../data/processed/genders_train.npy', genders[train_ind,:])
+        np.save('../data/processed/ages_train.npy', ages[train_ind,:])
+        np.save('../data/processed/diagnoses_train.npy', diagnoses[train_ind,:])
+
+        np.save('../data/processed/genders_test.npy', genders[test_ind,:])
+        np.save('../data/processed/ages_test.npy', ages[test_ind,:])
+        np.save('../data/processed/diagnoses_test.npy', diagnoses[test_ind,:])
+
+        np.save('../data/processed/train_indices.npy', train_ind)
+        np.save('../data/processed/test_indices.npy', test_ind)
+
 
         print('Files saved.')
 

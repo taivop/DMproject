@@ -62,7 +62,7 @@ class Diagnosis():
         import json
 
         # read file
-        filename = '../data/rhk.txt'
+        filename = '../data/other/rhk.txt'
         f = open(filename, encoding='utf-8')
         lines = f.readlines()
         f.close()

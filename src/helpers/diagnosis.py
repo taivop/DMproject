@@ -1,3 +1,5 @@
+import numpy as np
+
 # Terminology used:
 # Diagnosis ID: 5
 # Diagnosis code: "Z01"
@@ -127,3 +129,30 @@ class Diagnosis():
             if comma != -1:
                 base = base[:comma]
             return base
+
+
+        # Get one string of diagnoses (e.g. 'A01|Z00|R12') and turn it into a binary vector (for each diagnosis: 1 if exists
+    #  in string, 0 otherwise).
+    def diagnosisCodesToIndices(self, codeString):
+
+        length = self.numberOfDiagnoses
+        vector = np.zeros((1, length),np.dtype('b1'))
+
+        # Split into a list of diagnosis codes
+        codes = codeString.strip().split('|')
+
+
+        # Make every diagnosis in the list basic and turn it into the corresponding diagnosis id
+        ids = []
+        for code in codes:
+            try:
+                id = self.getIdFromCode(self.diagnosisCodeToBasic(code))
+                ids.append(id)
+            except KeyError:    # if there is no such diagnosis, let's not take it into account
+                pass
+
+
+        # Set vector values to 1 for ids for which a diagnosis existed
+        #vector[0,ids] = 1
+
+        return ids

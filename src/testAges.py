@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from helpers.age import Age
 
-ages = np.load('../data/processed/ages.npy')
+ages = np.load('../data/ages_train.npy')
 
 # print min, max
 print(np.min(ages))

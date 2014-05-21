@@ -70,4 +70,28 @@ class DataHandler():
         return
 
 
+    # Read in training data from files and return the corresponding arrays
+    def getTrainingData(self):
+        genders_train = np.load('../data/genders_train.npy')
+        ages_train = np.load('../data/ages_train.npy')
+        diagnoses_train = np.load('../data/diagnoses_train.npy')
+
+        return genders_train, ages_train, diagnoses_train
+
+    # Read in test data from files and return the corresponding arrays
+    def getTestData(self):
+        genders_test = np.load('../data/genders_test.npy')
+        ages_test = np.load('../data/ages_test.npy')
+        diagnoses_test = np.load('../data/diagnoses_test.npy')
+
+        return genders_test, ages_test, diagnoses_test
+
+    def getTrainingIndices(self):
+        return np.load('../data/train_indices.npy')
+
+    def getTestIndices(self):
+        return np.load('../data/test_indices.npy')
+
+
+
 

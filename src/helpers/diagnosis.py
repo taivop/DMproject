@@ -17,21 +17,21 @@ class Diagnosis():
         import json
 
         # Read mappings from file
-        filename = '..\maps\codesToLabels.dict'
+        filename = '../../maps/codesToLabels.dict'
         f = open(filename)
         line = f.readline()
         f.close()
         self.codesToLabels = json.loads(line)
 
         # Read mappings from file
-        filename = '..\maps\idsToCodes.dict'
+        filename = '../../maps/idsToCodes.dict'
         f = open(filename)
         line = f.readline()
         f.close()
         self.idsToCodes = json.loads(line)
 
         # Read mappings from file
-        filename = '..\maps\codesToIds.dict'
+        filename = '../../maps/codesToIds.dict'
         f = open(filename)
         line = f.readline()
         f.close()

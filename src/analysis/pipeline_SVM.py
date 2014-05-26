@@ -15,7 +15,7 @@ handler = DataHandler()
 genders, ages, diagnoses = handler.getAllData()
 
 #TODO: take small subset of data for testing
-num_ex = 10000
+num_ex = 30000
 diagnoses = diagnoses[0:num_ex, :]
 genders = genders[0:num_ex, :]
 ages = ages[0:num_ex, :]
@@ -29,9 +29,11 @@ print("\tdiagnoses: {0} x {1}".format(diagnoses.shape[0],diagnoses.shape[1]))
 num_rows = diagnoses.shape[0]
 num_features = diagnoses.shape[1]
 
-desired_explained_variance = 0.9
+
 
 # --- PCA ---
+
+desired_explained_variance = 0.9
 
 pcanode = mdp.nodes.PCANode(input_dim=diagnoses.shape[1],output_dim=desired_explained_variance)
 print("Start training PCANode.")
@@ -57,7 +59,7 @@ print("PCANode trained.")
 
 # Get the number of output components
 print("\t# of components: {0}".format(pcanode.output_dim))
-print("variance explained {0}".format(pcanode.explained_variance))
+print("\tvariance explained {0}".format(pcanode.explained_variance))
 
 pca_result = pcanode.execute(diagnoses)
 
@@ -68,10 +70,11 @@ pca_result = pcanode.execute(diagnoses)
 # and libsvm in general here: http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 
 # Create svmnode
-svmnode = mdp.nodes.LibSVMClassifier(kernel="LINEAR")
+kernel = "RBF"      # possible kernels LINEAR, RBF, POLY, SIGMOID
+svmnode = mdp.nodes.LibSVMClassifier(kernel=kernel)
 
 # Train svmnode
-print("Training SVMNode.")
+print("Training SVMNode (kernel {0}).".format(kernel))
 svmnode.train(pca_result, genders)
 print("\tgave data to SVMNode")
 
@@ -83,4 +86,6 @@ print("SVMNode trained.")
 print("Getting predictions...")
 svm_result = svmnode.label(pca_result)
 
-# Note: 10000 first rows gave 46.59% accuracy in classification with SVM (linear kernel), which is worse than random...
+# Linear kernel: using 10000 first rows gave 46.59% accuracy in gender prediction
+# Linear kernel: using all rows gave 45.15% accuracy in gender prediction
+# RBF kernel: using all rows gave 42.76% accuracy in gender prediction

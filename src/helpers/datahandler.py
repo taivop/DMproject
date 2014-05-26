@@ -72,9 +72,9 @@ class DataHandler():
 
     # Read in and return whole dataset
     def getAllData(self):
-        genders = np.load('../data/enders_train.npy')
-        ages = np.load('../data/ages_train.npy')
-        diagnoses = np.load('../data/diagnoses_train.npy')
+        genders = np.load('../../data/genders_train.npy')
+        ages = np.load('../../data/ages_train.npy')
+        diagnoses = np.load('../../data/diagnoses_train.npy')
 
         return genders, ages, diagnoses
 

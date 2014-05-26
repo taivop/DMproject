@@ -9,10 +9,17 @@ class Evaluator():
     ages_test = None
     diagnoses_test = None
 
+    genders_all = None
+    ages_all = None
+    diagnoses_all = None
+
+    handler = None
+
     def __init__(self):
         # load test data
-        handler = DataHandler()
-        self.genders_test, self.ages_test, self.diagnoses_test = handler.getTestData()
+        self.handler = DataHandler()
+        self.genders_test, self.ages_test, self.diagnoses_test = self.handler.getTestData()
+        self.genders_all, self.ages_all, self.diagnoses_all = self.handler.getAllData()
 
     def genders_fscore(self, predictions):
         foo = 0
@@ -21,12 +28,10 @@ class Evaluator():
 
 
 
+    def accuracy(self, predicted_vals, true_vals):
+        """ Get the accuracy given predicted classes and true classes.
+        """
 
-
-    def genders_accuracy(self, predictions):
-        size = predictions.shape[0]
-        print(predictions == self.test_genders)
-        acc = np.sum(predictions == self.test_genders) / size
-
-        return acc
+    def acc_genders_all(self, predicted_vals):
+        return self.accuracy(predicted_vals, self.genders_all)
 

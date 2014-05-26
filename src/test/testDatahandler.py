@@ -4,7 +4,7 @@ from helpers.datahandler import DataHandler
 
 handler = DataHandler()
 
-#handler.originalFileToProcessedFiles()
+handler.originalFileToProcessedFiles()
 
 genders, ages, diagnoses = handler.getTrainingData()
 
@@ -16,4 +16,4 @@ print(ages)
 
 
 test_arr = [[1, 1, 0, 0], [0, 0, 0, 0], [0, 1, 0, 0]]
-print(handler.hasAtLeastNDiagnoses(test_arr, 4))
+#print(handler.hasAtLeastNDiagnoses(test_arr, 4))

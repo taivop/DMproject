@@ -42,14 +42,17 @@ class DataHandler():
             genderStr = str(arr[i]['gender'][0]).strip("b'")
             genders[i] = (genderStr == 'M')
 
-        # partition into training set (80%) and test set (20%)
-        train_size = int(0.8 * arr.shape[0])
+        # partition into training set (80%), validation set (20%) and test set (20%)
+        train_size = int(0.6 * arr.shape[0])
         indices = np.random.permutation(arr.shape[0])
         train_ind = indices[:train_size]
-        test_ind = indices[train_size:]
+        test_size = int(0.2 * arr.shape[0])
+        test_ind = indices[train_size:train_size+test_size]
+        valid_ind = indices[train_size+test_size:]
 
         print('Training set size: {0} examples'.format(train_ind.shape[0]))
         print('Test set size: {0} examples'.format(test_ind.shape[0]))
+        print('Validation set size: {0} examples'.format(valid_ind.shape[0]))
 
         # Save arrays to files.
         np.save('../../data/processed/genders.npy', genders)
@@ -63,6 +66,10 @@ class DataHandler():
         np.save('../../data/processed/genders_test.npy', genders[test_ind,:])
         np.save('../../data/processed/ages_test.npy', ages[test_ind,:])
         np.save('../../data/processed/diagnoses_test.npy', diagnoses[test_ind,:])
+
+        np.save('../../data/processed/genders_validation.npy', genders[valid_ind,:])
+        np.save('../../data/processed/ages_validation.npy', ages[valid_ind,:])
+        np.save('../../data/processed/diagnoses_validation.npy', diagnoses[valid_ind,:])
 
         np.save('../../data/processed/train_indices.npy', train_ind)
         np.save('../../data/processed/test_indices.npy', test_ind)
@@ -108,6 +115,13 @@ class DataHandler():
         diagnoses_test = np.load('../../data/diagnoses_test.npy')
 
         return genders_test, ages_test, diagnoses_test
+
+    def getValidationData(self):
+        genders_validation = np.load('../../data/genders_validation.npy')
+        ages_validation = np.load('../../data/ages_validation.npy')
+        diagnoses_validation = np.load('../../data/diagnoses_validation.npy')
+
+        return genders_validation, ages_validation, diagnoses_validation
 
     def getTrainingIndices(self):
         return np.load('../data/train_indices.npy')

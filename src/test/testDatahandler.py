@@ -4,7 +4,7 @@ from helpers.datahandler import DataHandler
 
 handler = DataHandler()
 
-#handler.originalFileToProcessedFiles()
+handler.originalFileToProcessedFiles()
 
 genders, ages, diagnoses = handler.getTrainingData()
 

@@ -67,12 +67,16 @@ class DataHandler():
         np.save('../../data/processed/train_indices.npy', train_ind)
         np.save('../../data/processed/test_indices.npy', test_ind)
 
-
         print('Files saved.')
-
-
         return
 
+    # Read in and return whole dataset
+    def getAllData(self):
+        genders = np.load('../data/enders_train.npy')
+        ages = np.load('../data/ages_train.npy')
+        diagnoses = np.load('../data/diagnoses_train.npy')
+
+        return genders, ages, diagnoses
 
     # Read in training data from files and return the corresponding arrays
     def getTrainingData(self):
@@ -95,7 +99,3 @@ class DataHandler():
 
     def getTestIndices(self):
         return np.load('../data/test_indices.npy')
-
-
-
-

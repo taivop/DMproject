@@ -82,3 +82,5 @@ print("SVMNode trained.")
 # Get predicted classes
 print("Getting predictions...")
 svm_result = svmnode.label(pca_result)
+
+# Note: 10000 first rows gave 46.59% accuracy in classification with SVM (linear kernel), which is worse than random...

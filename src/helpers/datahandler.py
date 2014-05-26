@@ -84,6 +84,17 @@ class DataHandler():
         s = np.sum(array, axis=1)
         return s >= n
 
+    def removeLessThanNDiagnoses(self, data_tuple, n):
+        genders, ages, diagnoses = data_tuple
+
+        mask = self.hasAtLeastNDiagnoses(diagnoses, n)
+
+        genders2 = genders[mask]
+        ages2 = ages[mask]
+        diagnoses2 = diagnoses[mask]
+
+        return genders2, ages2, diagnoses2
+
 
     # Read in and return whole dataset
     def getAllData(self):
@@ -91,14 +102,7 @@ class DataHandler():
         ages = np.load('../../data/ages_train.npy')
         diagnoses = np.load('../../data/diagnoses_train.npy')
 
-        howManyDiagnosesRequired = 5
-        mask = self.hasAtLeastNDiagnoses(diagnoses, howManyDiagnosesRequired)
-
-        genders2 = genders[mask]
-        ages2 = ages[mask]
-        diagnoses2 = diagnoses[mask]
-
-        return genders2, ages2, diagnoses2
+        return genders, ages, diagnoses
 
     # Read in training data from files and return the corresponding arrays
     def getTrainingData(self):

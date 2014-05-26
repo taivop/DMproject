@@ -21,8 +21,8 @@ class DataHandler():
         toBeKept = []
         for ii in range(1,len(data)):
             row = data[ii]
-            # if BOTH diagnoses and prescriptions exist, keep the row
-            if row[2] != "b'NONE'" and row[3] != "b'NONE'":
+            # if diagnoses exist, keep the row
+            if row[2] != "b'NONE'":
                 toBeKept.append(ii)
 
         filtered = data[toBeKept]
@@ -87,24 +87,31 @@ class DataHandler():
     def removeLessThanNDiagnoses(self, data_tuple, n):
         genders, ages, diagnoses = data_tuple
 
-        mask = self.hasAtLeastNDiagnoses(diagnoses, n)
+        mask = np.squeeze(self.hasAtLeastNDiagnoses(diagnoses, n))
 
         genders2 = genders[mask]
         ages2 = ages[mask]
-        diagnoses2 = diagnoses[mask]
+        diagnoses2 = diagnoses[mask,:]
 
         return genders2, ages2, diagnoses2
 
-    def removeAgesAbove100(self, data_tuple, n=100):
+
+    def removeAgesAbove100(self, data_tuple):
         genders, ages, diagnoses = data_tuple
 
-        mask = ages > 100
+        mask = np.squeeze(np.asarray(ages <= 100))
+
+        print(mask.shape)
+        print(diagnoses.shape)
+        print(ages.shape)
 
         genders2 = genders[mask]
         ages2 = ages[mask]
-        diagnoses2 = diagnoses[mask]
+        print(diagnoses.shape)
+        diagnoses2 = diagnoses[mask,:]
 
         return genders2, ages2, diagnoses2
+
 
     # Read in and return whole dataset
     def getAllData(self):

@@ -70,6 +70,14 @@ class DataHandler():
         print('Files saved.')
         return
 
+    def hasAtLeastNDiagnoses(self, array, n):
+        """ Return a vector of same length as # of rows in n. k-th element is True iff k-th row in array contains at
+         least n diagnoses.
+        """
+        s = np.sum(array, axis=1)
+        return s >= n
+
+
     # Read in and return whole dataset
     def getAllData(self):
         genders = np.load('../../data/genders_train.npy')

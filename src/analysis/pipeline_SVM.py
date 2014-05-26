@@ -12,10 +12,10 @@ from helpers.datahandler import DataHandler
 
 # --- READ DATA ---
 handler = DataHandler()
-genders, ages, diagnoses = handler.getAllData()
+genders, ages, diagnoses = handler.getTrainingData()
 
-#TODO: take small subset of data for testing
-num_ex = 30000
+# Take first num_ex rows
+num_ex = 5000
 diagnoses = diagnoses[0:num_ex, :]
 genders = genders[0:num_ex, :]
 ages = ages[0:num_ex, :]
@@ -63,6 +63,8 @@ print("\tvariance explained {0}".format(pcanode.explained_variance))
 
 pca_result = pcanode.execute(diagnoses)
 
+# --- Evaluator ---
+evaluator = Evaluator()
 
 # --- SVM ---
 
@@ -70,11 +72,14 @@ pca_result = pcanode.execute(diagnoses)
 # and libsvm in general here: http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 
 # Create svmnode
-kernel = "RBF"      # possible kernels LINEAR, RBF, POLY, SIGMOID
-svmnode = mdp.nodes.LibSVMClassifier(kernel=kernel)
+kernel = "POLY"      # possible kernels LINEAR, RBF, POLY, SIGMOID
+classifier = "C_SVC"    # default is C_SVC
+params = {"degree": 3}
+svmnode = mdp.nodes.LibSVMClassifier(kernel=kernel,classifier=classifier, params=params)
 
 # Train svmnode
-print("Training SVMNode (kernel {0}).".format(kernel))
+print("Training SVMNode ({0} kernel, classifier {1}).".format(kernel, classifier))
+print("\tParameters: " + str(params))
 svmnode.train(pca_result, genders)
 print("\tgave data to SVMNode")
 
@@ -83,9 +88,12 @@ svmnode.stop_training()
 print("SVMNode trained.")
 
 # Get predicted classes
-print("Getting predictions...")
-svm_result = svmnode.label(pca_result)
+#print("Getting predictions for training set...")
+#svm_result = svmnode.label(pca_result)
 
-# Linear kernel: using 10000 first rows gave 46.59% accuracy in gender prediction
-# Linear kernel: using all rows gave 45.15% accuracy in gender prediction
-# RBF kernel: using all rows gave 42.76% accuracy in gender prediction
+print("Getting predictions for validation set")
+genders_validation, ages_validation, diagnoses_validation = handler.getValidationData()
+genders_predict = svmnode.label(pcanode.execute(diagnoses_validation))
+acc = evaluator.accuracy(genders_validation, genders_predict)
+print("\nModel accuracy on validation set: {0:.1f}%".format(acc * 100))
+

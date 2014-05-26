@@ -84,7 +84,14 @@ class DataHandler():
         ages = np.load('../../data/ages_train.npy')
         diagnoses = np.load('../../data/diagnoses_train.npy')
 
-        return genders, ages, diagnoses
+        howManyDiagnosesRequired = 5
+        mask = self.hasAtLeastNDiagnoses(diagnoses, howManyDiagnosesRequired)
+
+        genders2 = genders[mask]
+        ages2 = ages[mask]
+        diagnoses2 = diagnoses[mask]
+
+        return genders2, ages2, diagnoses2
 
     # Read in training data from files and return the corresponding arrays
     def getTrainingData(self):

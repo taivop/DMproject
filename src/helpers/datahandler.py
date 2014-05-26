@@ -95,6 +95,16 @@ class DataHandler():
 
         return genders2, ages2, diagnoses2
 
+    def removeAgesAbove100(self, data_tuple, n=100):
+        genders, ages, diagnoses = data_tuple
+
+        mask = ages > 100
+
+        genders2 = genders[mask]
+        ages2 = ages[mask]
+        diagnoses2 = diagnoses[mask]
+
+        return genders2, ages2, diagnoses2
 
     # Read in and return whole dataset
     def getAllData(self):

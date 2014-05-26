@@ -31,6 +31,13 @@ class Evaluator():
     def accuracy(self, predicted_vals, true_vals):
         """ Get the accuracy given predicted classes and true classes.
         """
+        correct = 0
+
+        for i in range(0,len(predicted_vals)):
+            if predicted_vals[i] == true_vals[i]:
+                correct += 1
+
+        return correct / predicted_vals.shape[0]
 
     def acc_genders_all(self, predicted_vals):
         return self.accuracy(predicted_vals, self.genders_all)

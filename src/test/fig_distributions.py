@@ -1,6 +1,7 @@
 from helpers.datahandler import DataHandler
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
 
 
 handler = DataHandler()
@@ -26,8 +27,10 @@ print("Ages bins:")
 # plot histogram (just to look at right now; will do it in some other program anyway)
 width = 0.7 * (bins[1] - bins[0])
 center = (bins[:-1] + bins[1:]) / 2
-#plt.bar(center, hist, align='center', width=width)
-#plt.show()
+plt.bar(center, hist, align='center', width=width)
+font = {'family': 'Calibri', 'size': 22}
+matplotlib.rc('font', **font)
+plt.show()
 
 
 
@@ -44,5 +47,5 @@ print("Diagnosis bins:")
 # plot histogram (just to look at right now; will do it in some other program anyway)
 width = 0.7 * (bins[1] - bins[0])
 center = (bins[:-1] + bins[1:]) / 2
-plt.bar(center, hist, align='center', width=width)
-plt.show()
+#plt.bar(center, hist, align='center', width=width)
+#plt.show()

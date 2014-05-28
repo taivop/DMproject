@@ -17,7 +17,7 @@ print("Women: {0}".format(sum(genders == 0)))
 # --- Ages distribution ---
 print("\nAges distribution")
 # create histogram data for age distribution
-bins = range(0,101,5)
+bins = range(0,101,1)#range(0,101,5)
 hist, bins = np.histogram(ages, bins=bins)
 print("Ages histogram values:")
 [print("{0}".format(h)) for h in hist]
@@ -37,7 +37,7 @@ plt.show()
 # --- Distribution of numbers of diagnoses ---
 print("\nDiagnoses distribution")
 summed = np.sum(diagnoses, axis=1)
-bins = range(0,59,2)
+bins = range(0,59,1)
 hist, bins = np.histogram(summed, bins=bins)
 print("Diagnosis histogram values:")
 [print("{0}".format(h)) for h in hist]

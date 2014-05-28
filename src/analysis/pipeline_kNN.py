@@ -11,7 +11,7 @@ handler = DataHandler()
 genders, ages, diagnoses = handler.getAllData()
 
 # Take subset of rows
-num_ex = 95
+num_ex = 30000
 diagnoses = diagnoses[0:num_ex, :]
 genders = genders[0:num_ex, :]
 ages = ages[0:num_ex, :]

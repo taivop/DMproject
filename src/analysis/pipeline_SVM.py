@@ -16,7 +16,7 @@ handler = DataHandler()
 genders, ages, diagnoses = handler.getTrainingData()
 
 # Take first num_ex rows
-num_ex = 10000
+num_ex = 50000
 diagnoses = diagnoses[0:num_ex, :]
 genders = genders[0:num_ex, :]
 ages = ages[0:num_ex, :]
@@ -72,6 +72,7 @@ breakIndex = diagnoses.shape[0]/2
 pca_result1 = pcanode.execute(diagnoses[0:breakIndex,:])
 pca_result2 = pcanode.execute(diagnoses[breakIndex:,:])
 pca_result = np.concatenate((pca_result1,pca_result2), axis=0)
+print(pca_result.shape[1])
 
 # Save processed data to file
 #pca_result_validation = pcanode.execute(handler.getValidationData()[2])
@@ -98,9 +99,9 @@ svmnode = mdp.nodes.LibSVMClassifier(kernel=kernel,classifier=classifier, params
 # Train svmnode
 print("Training SVMNode ({0} kernel, classifier {1}).".format(kernel, classifier))
 print("\tParameters: " + str(params))
-svmnode.train(pca_result, genders)
-print("\tgave data to SVMNode")
 
+svmnode.train(pca_result, genders)
+print("\tgave data to SVM")
 svmnode.stop_training()
 
 print("SVMNode trained.")

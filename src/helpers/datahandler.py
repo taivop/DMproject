@@ -1,4 +1,5 @@
 from helpers.diagnosis import Diagnosis
+from helpers.age import Age
 import numpy as np
 
 class DataHandler():
@@ -29,7 +30,9 @@ class DataHandler():
         arr = filtered.view(np.ndarray).reshape(len(filtered), -1)
 
         # Create separate arrays for ages, sexes, diagnoses and prescriptions
-        ages = arr['age']
+        ages = np.zeros((arr.shape[0],1))
+
+        agehandler = Age()
 
         # create empty arrays and populate with data
         genders = np.zeros((arr.shape[0], 1), np.dtype('b1'))
@@ -41,6 +44,7 @@ class DataHandler():
             diagnoses[i, indices] = 1
             genderStr = str(arr[i]['gender'][0]).strip("b'")
             genders[i] = (genderStr == 'M')
+            ages[i] = agehandler.getBinFromAge(int(arr[i]['age'][0]))
 
         # partition into training set (80%), validation set (20%) and test set (20%)
         train_size = int(0.6 * arr.shape[0])
@@ -101,13 +105,8 @@ class DataHandler():
 
         mask = np.squeeze(np.asarray(ages <= 100))
 
-        print(mask.shape)
-        print(diagnoses.shape)
-        print(ages.shape)
-
         genders2 = genders[mask]
         ages2 = ages[mask]
-        print(diagnoses.shape)
         diagnoses2 = diagnoses[mask,:]
 
         return genders2, ages2, diagnoses2

@@ -16,7 +16,7 @@ handler = DataHandler()
 genders, ages, diagnoses = handler.getTrainingData()
 
 # Take first num_ex rows
-num_ex = 5000
+num_ex = 10000
 diagnoses = diagnoses[0:num_ex, :]
 genders = genders[0:num_ex, :]
 ages = ages[0:num_ex, :]
@@ -89,8 +89,9 @@ evaluator = Evaluator()
 # Create svmnode
 kernel = "RBF"      # possible kernels LINEAR, RBF, POLY, SIGMOID
 classifier = "C_SVC"    # default is C_SVC
-C = 1000;
-gamma = 1/pca_result.shape[1];
+C = 5;
+gamma_fac = 1;
+gamma = gamma_fac * 1/pca_result.shape[1];
 params = {"gamma": gamma, "C": C}
 svmnode = mdp.nodes.LibSVMClassifier(kernel=kernel,classifier=classifier, params=params)
 
@@ -104,18 +105,38 @@ svmnode.stop_training()
 
 print("SVMNode trained.")
 
-# Get predicted classes
 
+# Get predicted classes
 
 print("Getting predictions for validation set")
 min_diagnoses = 1; # at least how many diagnoses do we want to use from test set
 genders_validation, ages_validation, diagnoses_validation = handler.removeLessThanNDiagnoses(handler.getValidationData(), min_diagnoses)
-genders_predict = svmnode.label(pcanode.execute(diagnoses_validation))
+break1 = diagnoses_validation.shape[0] // 3
+break2 = break1 * 2
+
+# do it in batches
+genders_predict1 = svmnode.label(pcanode.execute(diagnoses_validation[:break1,:]))
+genders_predict2 = svmnode.label(pcanode.execute(diagnoses_validation[break1:break2,:]))
+genders_predict3 = svmnode.label(pcanode.execute(diagnoses_validation[break2:,:]))
+genders_predict = np.concatenate((genders_predict1,genders_predict2,genders_predict3), axis=0)
+
+# now test set
+genders_test, ages_test, diagnoses_test = handler.removeLessThanNDiagnoses(handler.getTestData(), min_diagnoses)
+genders_predict_test1 = svmnode.label(pcanode.execute(diagnoses_test[:break1,:]))
+genders_predict_test2 = svmnode.label(pcanode.execute(diagnoses_test[break1:break2,:]))
+genders_predict_test3 = svmnode.label(pcanode.execute(diagnoses_test[break2:,:]))
+genders_predict_test = np.concatenate((genders_predict_test1,genders_predict_test2,genders_predict_test3), axis=0)
+
 acc = evaluator.accuracy(genders_validation, genders_predict)
 print("\nModel accuracy on validation set: {0:.1f}%".format(acc * 100))
 
-
+# Saving file
 resultString = "{:.1f};{:.3f};{:.6f};{};{};{};{}".format(acc*100, C, gamma, min_diagnoses, num_ex, kernel, classifier)
+filenameString = resultString.replace(";","_").replace(".","-")
+
+np.save("../../results/svm_predictions/" + filenameString + "_predictions_validation", genders_predict)
+np.save("../../results/svm_predictions/" + filenameString + "_predictions_test", genders_predict_test)
+
 print(resultString)
 with open("../../results/rbf-probing.txt", "a") as outfile:
     outfile.write('\n' + resultString)
